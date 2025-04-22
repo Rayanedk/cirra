@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: cirra-backend
-    env: docker
-    plan: free
-    region: oregon
-    dockerfilePath: ./Dockerfile
-    buildCommand: "./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/test-0.0.1-SNAPSHOT.jar"
