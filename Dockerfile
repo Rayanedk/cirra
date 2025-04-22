@@ -1,14 +1,12 @@
-# Étape 1 : image de base avec Java
-FROM openjdk:17-jdk-slim
-
-# Étape 2 : dossier de travail
+# Étape 1 : construire le .jar avec Maven
+FROM maven:3.9.4-eclipse-temurin-17 as builder
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Étape 3 : copier le .jar
-COPY target/test-0.0.1-SNAPSHOT.jar app.jar
-
-# Étape 4 : exposer le port
+# Étape 2 : image finale
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/target/test-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Étape 5 : lancer l’application
 ENTRYPOINT ["java", "-jar", "app.jar"]
